@@ -52,8 +52,6 @@ void setup() {
     
     //motor.LPF_angle = 0.01;
     motor.LPF_velocity = 0.01;
-
-    motor.init();
  
     // Control mode configuration
     motor.controller = MotionControlType::velocity;
