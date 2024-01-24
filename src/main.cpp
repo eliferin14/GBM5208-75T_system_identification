@@ -15,13 +15,14 @@ BLDCMotor motor = BLDCMotor(POLE_PAIRS);  // NB: for pure voltage control, do no
 uint32_t t_start = 0;
 uint32_t t_loop = 0;
 
-float sinusoidal_frequencies[] = {1,2,3,10};
+float sinusoidal_frequencies[] = {0.1,15, 0.2,0.33};
 float amplitude = 1;
+float freq_multiplier = 1;
 float computeInputSignal(uint32_t t_micros) {
     float t_seconds = ((float)t_micros)/1000000.0;
     float u = 0;
     for (float freq : sinusoidal_frequencies) {
-        u += amplitude * sin(2*PI*freq*t_seconds);
+        u += amplitude * sin(2*PI*freq_multiplier*freq*t_seconds);
     }
     return u;
 }
@@ -69,6 +70,8 @@ void setup() {
 
     _delay(1000);
 
+    // TODO: wait for button press
+
     // Start the stopwatch
     t_start = micros();
     t_loop = t_start;
@@ -87,7 +90,7 @@ void loop() {
 
     // Print data to serial
     if ( micros()-t_loop > 10000 ) {
-        Serial.print(t_micros); Serial.print("\t"); Serial.print(u); Serial.print("\t"); Serial.print(motor.voltage.q); Serial.print("\t"); Serial.print(motor.shaft_velocity); Serial.print("\t"); Serial.print(motor.shaft_angle); Serial.print("\t"); Serial.println();
+        Serial.print(t_micros); Serial.print("\t"); Serial.print(motor.voltage.q); Serial.print("\t"); Serial.print(motor.shaft_velocity); Serial.print("\t"); Serial.print(motor.shaft_angle); Serial.print("\t"); Serial.println();
         //motor.monitor();
         //Serial.print("\t"); Serial.println( micros()-t );
         t_loop = micros();
